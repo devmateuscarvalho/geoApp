@@ -19,15 +19,30 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#007AFF",
-        tabBarInactiveTintColor: "#8E8E93",
+        tabBarActiveTintColor: "#4A4A4A",
+        tabBarInactiveTintColor: "#A9A9A9",
         tabBarStyle: {
-          backgroundColor: "#fff",
+          backgroundColor: "#E0E0E0",
+          borderTopWidth: 0,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 5,
         },
         headerStyle: {
-          backgroundColor: "#007AFB",
+          backgroundColor: "#F5F5F5",
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.05,
+          shadowRadius: 2,
+          elevation: 3,
         },
-        headerTintColor: "#fff",
+        headerTintColor: "#4A4A4A",
+        headerTitleStyle: {
+          fontWeight: "normal",
+          fontSize: 16,
+        },
       }}
     >
       <Tabs.Screen
@@ -46,7 +61,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="dimensionamento-solo"
         options={{
-          title: "Solo",
+          title: "Dimensionamento do Solo",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="terrain" color={color} />
           ),

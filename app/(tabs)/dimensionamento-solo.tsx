@@ -13,11 +13,9 @@ const StyledInput = styled.TextInput`
 export default function DimensionamentoSolo() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dimensionamento do Solo</Text>
       <Text style={styles.description}>
         Aqui você poderá realizar os cálculos de dimensionamento do solo.
       </Text>
-      {/* Aqui você pode adicionar os campos de entrada e cálculos específicos */}
     </View>
   );
 }

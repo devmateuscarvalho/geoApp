@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { ScrollView, Alert, View, Text, Platform } from "react-native";
+import { ScrollView, Alert, View, Text, Platform, Pressable } from "react-native";
 import styled from "styled-components/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MuroGabiaoTypes, {
   MuroGabiaoData,
   MuroGabiaoFormErrors,
@@ -151,6 +152,8 @@ export default function MuroGabiao() {
   });
 
   const [errors, setErrors] = useState<MuroGabiaoFormErrors>({});
+  const [showMaterialCosts, setShowMaterialCosts] = useState(false);
+  const [showAdditionalCosts, setShowAdditionalCosts] = useState(false);
 
   const calcularVolume = () => {
     const volume =
@@ -257,7 +260,6 @@ export default function MuroGabiao() {
 
   return (
     <Container>
-
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
         <View style={{ width: '48%' }}>
           <InputField
@@ -292,7 +294,7 @@ export default function MuroGabiao() {
       </View>
 
       <ResultSection>
-        <ResultTitle>Resultados do Cálculo</ResultTitle>
+        <ResultTitle>Resultados</ResultTitle>
 
         <ResultRow>
           <ResultLabel>Volume Total:</ResultLabel>
@@ -301,56 +303,71 @@ export default function MuroGabiao() {
           </ResultValue>
         </ResultRow>
 
-        <ResultSubtitle>Custos dos Materiais</ResultSubtitle>
+        <Pressable onPress={() => setShowMaterialCosts(!showMaterialCosts)} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <ResultSubtitle>Custos dos Materiais</ResultSubtitle>
+          <MaterialCommunityIcons
+            name={showMaterialCosts ? "minus" : "plus"}
+            size={24}
+            color="#4A4A4A"
+          />
+        </Pressable>
+        {showMaterialCosts && (
+          <ResultCard>
+            <ResultRow>
+              <ResultLabel>Pedras:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoTotalPedras)}
+              </ResultValue>
+            </ResultRow>
+            <ResultRow>
+              <ResultLabel>Malha de Gabião:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoTotalMalha)}
+              </ResultValue>
+            </ResultRow>
+            <ResultRow>
+              <ResultLabel>Geotêxtil:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoTotalGeotextil)}
+              </ResultValue>
+            </ResultRow>
+            <ResultRow>
+              <ResultLabel>Concreto Magro:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoTotalConcretoMagro)}
+              </ResultValue>
+            </ResultRow>
+          </ResultCard>
+        )}
 
-        <ResultCard>
-          <ResultRow>
-            <ResultLabel>Pedras:</ResultLabel>
-            <ResultValue>
-              {formatarMoeda(formData.custoTotalPedras)}
-            </ResultValue>
-          </ResultRow>
-
-          <ResultRow>
-            <ResultLabel>Malha de Gabião:</ResultLabel>
-            <ResultValue>{formatarMoeda(formData.custoTotalMalha)}</ResultValue>
-          </ResultRow>
-
-          <ResultRow>
-            <ResultLabel>Geotêxtil:</ResultLabel>
-            <ResultValue>
-              {formatarMoeda(formData.custoTotalGeotextil)}
-            </ResultValue>
-          </ResultRow>
-
-          <ResultRow>
-            <ResultLabel>Concreto Magro:</ResultLabel>
-            <ResultValue>
-              {formatarMoeda(formData.custoTotalConcretoMagro)}
-            </ResultValue>
-          </ResultRow>
-        </ResultCard>
-
-        <ResultSubtitle>Custos Adicionais</ResultSubtitle>
-
-        <ResultCard>
-          <ResultRow>
-            <ResultLabel>Mão de Obra:</ResultLabel>
-            <ResultValue>{formatarMoeda(formData.custoMaoDeObra)}</ResultValue>
-          </ResultRow>
-
-          <ResultRow>
-            <ResultLabel>Equipamentos:</ResultLabel>
-            <ResultValue>
-              {formatarMoeda(formData.custoEquipamentos)}
-            </ResultValue>
-          </ResultRow>
-
-          <ResultRow>
-            <ResultLabel>BDI:</ResultLabel>
-            <ResultValue>{formatarMoeda(formData.custoBDI)}</ResultValue>
-          </ResultRow>
-        </ResultCard>
+        <Pressable onPress={() => setShowAdditionalCosts(!showAdditionalCosts)} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <ResultSubtitle>Custos Adicionais</ResultSubtitle>
+          <MaterialCommunityIcons
+            name={showAdditionalCosts ? "minus" : "plus"}
+            size={24}
+            color="#4A4A4A"
+          />
+        </Pressable>
+        {showAdditionalCosts && (
+          <ResultCard>
+            <ResultRow>
+              <ResultLabel>Mão de Obra:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoMaoDeObra)}
+              </ResultValue>
+            </ResultRow>
+            <ResultRow>
+              <ResultLabel>Equipamentos:</ResultLabel>
+              <ResultValue>
+                {formatarMoeda(formData.custoEquipamentos)}
+              </ResultValue>
+            </ResultRow>
+            <ResultRow>
+              <ResultLabel>BDI:</ResultLabel>
+              <ResultValue>{formatarMoeda(formData.custoBDI)}</ResultValue>
+            </ResultRow>
+          </ResultCard>
+        )}
 
         <TotalContainer>
           <TotalLabel>Custo Total da Obra</TotalLabel>
