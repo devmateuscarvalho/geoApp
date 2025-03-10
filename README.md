@@ -1,4 +1,4 @@
-# Meu App
+# geo app
 
 Este é um aplicativo desenvolvido em React Native usando Expo.
 
