@@ -1,11 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Pressable } from "react-native";
-
-import Colors from "@/constants/Colors";
-import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import { Pressable, useColorScheme } from "react-native";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -29,10 +25,9 @@ export default function TabLayout() {
           backgroundColor: "#fff",
         },
         headerStyle: {
-          backgroundColor: "#007AFF",
+          backgroundColor: "#007AFB",
         },
         headerTintColor: "#fff",
-        headerShown: useClientOnlyValue(false, true),
       }}
     >
       <Tabs.Screen
