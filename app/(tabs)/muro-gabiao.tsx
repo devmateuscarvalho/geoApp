@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ScrollView, Alert, View, Text } from "react-native";
+import { ScrollView, Alert, View, Text, Platform } from "react-native";
 import styled from "styled-components/native";
 import MuroGabiaoTypes, {
   MuroGabiaoData,
@@ -15,7 +15,7 @@ const Container = styled(ScrollView)`
 `;
 
 const Title = styled(Text)`
-  font-size: 24px;
+  font-size: ${Platform.select({ ios: '22px', android: '24px' })};
   font-weight: bold;
   margin-bottom: 20px;
   color: #1a1a1a;
