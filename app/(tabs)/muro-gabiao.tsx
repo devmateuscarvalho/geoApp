@@ -6,7 +6,7 @@ import MuroGabiaoTypes, {
   MuroGabiaoFormErrors,
   CUSTOS_UNITARIOS,
 } from "../types/muro-gabiao";
-import { InputField } from "../components/Input";
+import InputField from "../components/ui/Input";
 
 const Container = styled(ScrollView)`
   flex: 1;
