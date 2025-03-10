@@ -15,14 +15,6 @@ const Container = styled(ScrollView)`
   background-color: #f5f5f5;
 `;
 
-const Title = styled(Text)`
-  font-size: ${Platform.select({ ios: '22px', android: '24px' })};
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #1a1a1a;
-  text-align: center;
-`;
-
 const ResultSection = styled(View)`
   background-color: #fff;
   padding: 20px;
@@ -31,7 +23,7 @@ const ResultSection = styled(View)`
   shadow-offset: 0 2px;
   shadow-opacity: 0.2;
   shadow-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 
 const ResultTitle = styled(Text)`
@@ -112,12 +104,6 @@ const SaveButton = styled(View)`
   press-style: {
     opacity: 0.8;
   }
-`;
-
-const SaveButtonText = styled(Text)`
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
 `;
 
 const formatarMoeda = (valor: number): string => {
