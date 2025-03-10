@@ -1,5 +1,6 @@
 # geo app
 
+Criado com o intuito de ajudar engenheiros a precificar obras em campo, baseado nos valores atualizados dos materiais da SINAPI.
 Este é um aplicativo desenvolvido em React Native usando Expo.
 
 ## Pré-requisitos
