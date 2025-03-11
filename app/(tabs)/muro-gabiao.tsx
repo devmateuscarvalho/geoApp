@@ -55,11 +55,30 @@ const TotalValue = styled(Text)`
   color: #fff;
 `;
 
-const formatarMoeda = (valor: number): string => {
+const formatCurrency = (valor: number): string => {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
   });
+};
+
+// Função para formatar números com pontos
+const formatNumber = (value: string): string => {
+  // Remove caracteres não numéricos
+  const numericValue = value.replace(/\D/g, '');
+  
+  // Converte para número e formata com pontos
+  if (numericValue) {
+    const number = parseInt(numericValue, 10);
+    return number.toLocaleString('pt-BR');
+  }
+  
+  return '';
+};
+
+// Função para remover formatação (pontos)
+const unformatNumber = (value: string): string => {
+  return value.replace(/\D/g, '');
 };
 
 export default function MuroGabiao() {
@@ -89,6 +108,13 @@ export default function MuroGabiao() {
   const [errors, setErrors] = useState<MuroGabiaoFormErrors>({});
   const [showMaterialCosts, setShowMaterialCosts] = useState(false);
   const [showAdditionalCosts, setShowAdditionalCosts] = useState(false);
+  
+  // Estado para armazenar os valores formatados
+  const [inputValues, setInputValues] = useState({
+    alturaDoMuro: '',
+    comprimentoDoMuro: '',
+    espessuraDoMuro: ''
+  });
 
   const calcularVolume = () => {
     const volume =
@@ -176,15 +202,9 @@ export default function MuroGabiao() {
       return true;
     }
 
-    const numValue = Number(trimmedValue);
-
-    if (isNaN(numValue)) {
-      setErrors((prev: MuroGabiaoFormErrors) => ({
-        ...prev,
-        [name]: "Valor deve ser um número",
-      }));
-      return false;
-    }
+    // Remove a formatação para validar o número
+    const unformattedValue = unformatNumber(trimmedValue);
+    const numValue = Number(unformattedValue);
 
     if (numValue <= 0) {
       setErrors((prev: MuroGabiaoFormErrors) => ({
@@ -194,22 +214,48 @@ export default function MuroGabiao() {
       return false;
     }
 
+    // Verifica se o valor é maior que 100 mil
+    if (numValue > 100000) {
+      setErrors((prev: MuroGabiaoFormErrors) => ({
+        ...prev,
+      }));
+      return false;
+    }
+
     setErrors((prev: MuroGabiaoFormErrors) => ({ ...prev, [name]: undefined }));
     return true;
   };
 
   const handleInputChange = (name: keyof MuroGabiaoData, value: string) => {
-    if (validateField(name, value)) {
+    // Remove formatação para processamento
+    const unformattedValue = unformatNumber(value);
+    
+    if (validateField(name, unformattedValue)) {
+      const numValue = Number(unformattedValue);
+      
       setFormData((prev: MuroGabiaoData) => ({
         ...prev,
-        [name]: Number(value),
+        [name]: numValue,
       }));
+      
       if (
         ["alturaDoMuro", "comprimentoDoMuro", "espessuraDoMuro"].includes(name)
       ) {
         calcularVolume();
       }
     }
+  };
+  
+  // Função para formatar o input enquanto o usuário digita
+  const formatInputValue = (name: keyof typeof inputValues, value: string) => {
+    // Remove qualquer caractere não numérico
+    const numericValue = value.replace(/\D/g, '');
+    
+    // Formata o valor
+    const formattedValue = numericValue ? parseInt(numericValue, 10).toLocaleString('pt-BR') : '';
+    
+    // Atualiza o estado e processa o valor
+    handleInputChange(name as keyof MuroGabiaoData, formattedValue);
   };
 
   return (
@@ -218,8 +264,12 @@ export default function MuroGabiao() {
         <InputField
           label="Altura"
           keyboardType="numeric"
-          value={formData.alturaDoMuro.toString()}
-          onChangeText={(value) => handleInputChange("alturaDoMuro", value)}
+          value={formData.alturaDoMuro > 0 ? formatNumber(formData.alturaDoMuro.toString()) : ''}
+          onChangeText={(value) => {
+            // Formata o valor para exibição
+            const formattedValue = formatNumber(value);
+            handleInputChange("alturaDoMuro", formattedValue);
+          }}
           error={errors.alturaDoMuro}
           width={42.5}
           unit="m"
@@ -227,10 +277,12 @@ export default function MuroGabiao() {
         <InputField
           label="Comprimento"
           keyboardType="numeric"
-          value={formData.comprimentoDoMuro.toString()}
-          onChangeText={(value) =>
-            handleInputChange("comprimentoDoMuro", value)
-          }
+          value={formData.comprimentoDoMuro > 0 ? formatNumber(formData.comprimentoDoMuro.toString()) : ''}
+          onChangeText={(value) => {
+            // Formata o valor para exibição
+            const formattedValue = formatNumber(value);
+            handleInputChange("comprimentoDoMuro", formattedValue);
+          }}
           width={42.5}
           error={errors.comprimentoDoMuro}
           unit="m"
@@ -240,8 +292,12 @@ export default function MuroGabiao() {
         <InputField
           label="Espessura"
           keyboardType="numeric"
-          value={formData.espessuraDoMuro.toString()}
-          onChangeText={(value) => handleInputChange("espessuraDoMuro", value)}
+          value={formData.espessuraDoMuro > 0 ? formatNumber(formData.espessuraDoMuro.toString()) : ''}
+          onChangeText={(value) => {
+            // Formata o valor para exibição
+            const formattedValue = formatNumber(value);
+            handleInputChange("espessuraDoMuro", formattedValue);
+          }}
           error={errors.espessuraDoMuro}
           width={42.5}
           unit="m"
@@ -272,19 +328,19 @@ export default function MuroGabiao() {
             <Card>
               <Row
                 label="Pedras:"
-                value={formatarMoeda(formData.custoTotalPedras)}
+                value={formatCurrency(formData.custoTotalPedras)}
               />
               <Row
                 label="Malha de Gabião:"
-                value={formatarMoeda(formData.custoTotalMalha)}
+                value={formatCurrency(formData.custoTotalMalha)}
               />
               <Row
                 label="Geotêxtil:"
-                value={formatarMoeda(formData.custoTotalGeotextil)}
+                value={formatCurrency(formData.custoTotalGeotextil)}
               />
               <Row
                 label="Concreto Magro:"
-                value={formatarMoeda(formData.custoTotalConcretoMagro)}
+                value={formatCurrency(formData.custoTotalConcretoMagro)}
               />
             </Card>
           )}
@@ -308,19 +364,19 @@ export default function MuroGabiao() {
             <Card>
               <Row
                 label="Mão de Obra:"
-                value={formatarMoeda(formData.custoMaoDeObra)}
+                value={formatCurrency(formData.custoMaoDeObra)}
               />
               <Row
                 label="Equipamentos:"
-                value={formatarMoeda(formData.custoEquipamentos)}
+                value={formatCurrency(formData.custoEquipamentos)}
               />
-              <Row label="BDI:" value={formatarMoeda(formData.custoBDI)} />
+              <Row label="BDI:" value={formatCurrency(formData.custoBDI)} />
             </Card>
           )}
 
           <TotalContainer>
-            <TotalLabel>Custo Total da Obra</TotalLabel>
-            <TotalValue>{formatarMoeda(formData.custoTotalObra)}</TotalValue>
+            <TotalLabel>Custo Total</TotalLabel>
+            <TotalValue>{formatCurrency(formData.custoTotalObra)}</TotalValue>
           </TotalContainer>
         </ResultSection>
       </View>
